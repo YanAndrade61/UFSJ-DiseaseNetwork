@@ -1,6 +1,6 @@
-class Individuo:
+class Params:
     """
-    Representa um indivíduo no modelo de simulação.
+    Representa um conjunto de parâmetros no modelo de simulação.
 
     Atributos:
     - tx_mortalidade (float): A taxa de mortalidade do indivíduo.
@@ -16,3 +16,12 @@ class Individuo:
         self.tx_infeccao = tx_infeccao
         self.tx_nascimento = tx_nascimento
         self.tx_recuperacao = tx_recuperacao
+
+    def __str__(self):
+        string = f'''Params:
+    Mortalidade: {self.tx_mortalidade}
+    Mobilidade: {self.tx_mobilidade}
+    Infeccao: {self.tx_infeccao}
+    Nascimento: {self.tx_nascimento}
+    Recuperacao: {self.tx_recuperacao}'''
+        return string
