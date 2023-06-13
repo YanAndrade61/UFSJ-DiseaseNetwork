@@ -2,8 +2,8 @@
 
 Metodologia de implementação:
 
-- [ ] Implementar: classe individuo
-- [ ] Implementar: classe população
+- [x] Implementar: classe individuo
+- [x] Implementar: classe população
 - [ ] Implementar: classe região
 - [ ] Implementar: classe rede 
 - [ ] Selecionar: cidade
