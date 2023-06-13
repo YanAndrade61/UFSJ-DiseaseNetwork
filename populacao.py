@@ -20,5 +20,10 @@ class Populacao:
         self.R = R
 
     def __str__(self) -> str:
-        string = f'Label: {self.label}\nS: {self.S}\nI: {self.I}\nR: {self.R}\n{self.params}'
+        string = f'''\nPopulacao:
+    Label: {self.label}
+    S: {self.S}
+    I: {self.I}
+    R: {self.R}
+    {self.params}'''
         return string

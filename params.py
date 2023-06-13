@@ -19,9 +19,9 @@ class Params:
 
     def __str__(self):
         string = f'''Params:
-    Mortalidade: {self.tx_mortalidade}
-    Mobilidade: {self.tx_mobilidade}
-    Infeccao: {self.tx_infeccao}
-    Nascimento: {self.tx_nascimento}
-    Recuperacao: {self.tx_recuperacao}'''
+        Mortalidade: {self.tx_mortalidade}
+        Mobilidade: {self.tx_mobilidade}
+        Infeccao: {self.tx_infeccao}
+        Nascimento: {self.tx_nascimento}
+        Recuperacao: {self.tx_recuperacao}'''
         return string

@@ -20,4 +20,10 @@ class Regiao:
         return sum(pop.I for pop in self.populacoes)
 
     def get_R(self):
-        return sum(pop.R for pop in self.populacoes)
+        return sum(pop.R for pop in self.populacoes)   
+
+    def __str__(self):
+        string = f'id: {self.id}\nvizinhos: {self.id}'
+        for pop in self.populacoes:
+            string += str(pop)
+        return string
