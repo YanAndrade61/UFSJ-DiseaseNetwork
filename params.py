@@ -18,6 +18,9 @@ class Params:
         self.tx_recuperacao = tx_recuperacao
 
     def __str__(self):
+        """
+        Retorna uma representação em string dos parâmetros.
+        """
         string = f'''Params:
         Mortalidade: {self.tx_mortalidade}
         Mobilidade: {self.tx_mobilidade}
