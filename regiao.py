@@ -1,5 +1,6 @@
 from ode import *
 import numpy as np
+import matplotlib.pyplot as plt
 
 class Regiao:
     """
@@ -16,6 +17,7 @@ class Regiao:
         self.populacoes = populacoes
         self.vizinhos = vizinhos
         self.hist = {pop.label: list() for pop in populacoes}
+        self.steps = 0
 
     def get_S(self):
         return sum(pop.S for pop in self.populacoes)
@@ -25,17 +27,35 @@ class Regiao:
 
     def get_R(self):
         return sum(pop.R for pop in self.populacoes)
+    
+    def get_SIR(self):
+        return sum(pop.S+pop.I+pop.R for pop in self.populacoes)
 
     def simulate(self):
         
-        I_total = self.get_I()
+        I_norm = self.get_I()/self.get_SIR()
         for pop in self.populacoes:
-            _yk = [pop.S,pop.I,pop.R,I_total]
+            _yk = [pop.S,pop.I,pop.R,I_norm]
             pop.S,pop.I,pop.R,_ = rk4(ode_system,_yk,pop.params)
             self.hist[pop.label].append([pop.S,pop.I,pop.R])
+        
+        self.steps += 1
+
+    def plot(self):
+
+        fig, ax = plt.subplots(1,len(self.populacoes))
+        time = np.arange(0,self.steps*0.01,0.01)
+        for i,pop in enumerate(self.populacoes):
+            ax[i].set(xlabel='time (days)', ylabel='[Y]', title=pop.label)
+            ax[i].plot(time, self.hist[pop.label])
+            plt.legend(['S','I','R'], loc='best')
+            ax[i].grid()
+        
+        fig.savefig('simulation')
+        plt.show()
 
     def __str__(self):
-        string = f'id: {self.id}\nvizinhos: {self.id}'
+        string = f'\nid: {self.id}\nvizinhos: {self.vizinhos}'
         for pop in self.populacoes:
             string += str(pop)
         return string
