@@ -34,16 +34,16 @@ idoso_config = {
 
 adulto = Populacao(**adulto_config)
 idoso = Populacao(**idoso_config)
-# regiao = Regiao(1,[adulto,idoso],[1,2])
+regiao = Regiao(1,[adulto,idoso],[1,2])
 
-# time = 100
+time = 100
 
-# for i in range(time):
-#     regiao.simulate()
+for i in range(time):
+    regiao.simulate_edo()
 
-# regiao.plot()
+regiao.plot()
 
-G = ox.graph_from_place("São João del Rei, Minas Gerais, Brazil", network_type="drive")
+# G = ox.graph_from_place("São João del Rei, Minas Gerais, Brazil", network_type="drive")
 
 
-print(Rede(G,[adulto,idoso]))
+# print(Rede(G,[adulto,idoso]))
