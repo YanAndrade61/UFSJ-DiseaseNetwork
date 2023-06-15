@@ -10,7 +10,7 @@ adulto_config = {
     "label": "adulto",
     "params": {  
         "tx_mortalidade": 0.1,
-        "tx_mobilidade": 0,
+        "tx_mobilidade": 0.5,
         "tx_infeccao": 0.2,
         "tx_nascimento": 0.,
         "tx_recuperacao": 0.1},
@@ -23,7 +23,7 @@ idoso_config = {
     "label": "idoso",
     "params": {  
         "tx_mortalidade": 0.1,
-        "tx_mobilidade": 0,
+        "tx_mobilidade": 0.1,
         "tx_infeccao": 0.1,
         "tx_nascimento": 0,
         "tx_recuperacao": 0.2},
@@ -34,14 +34,16 @@ idoso_config = {
 
 adulto = Populacao(**adulto_config)
 idoso = Populacao(**idoso_config)
-regiao = Regiao(1,[adulto,idoso],[1,2])
+regiao = Regiao(1,[adulto,idoso],[3,2])
 
 time = 100
 
-for i in range(time):
-    regiao.simulate_edo()
+# for i in range(time):
+#     regiao.simulate_edo()
 
-regiao.plot()
+print(regiao.simulate_move())
+
+# regiao.plot()
 
 # G = ox.graph_from_place("São João del Rei, Minas Gerais, Brazil", network_type="drive")
 

@@ -79,6 +79,53 @@ class Regiao:
             self.hist[pop.label].append([pop.S, pop.I, pop.R])
 
         self.steps += 1
+    def simulate_move(self):
+        """
+        Simula os movimentos dos indivíduos entre as regiões vizinhas.
+
+        Retorna um dicionário que representa os movimentos dos indivíduos entre
+        as regiões vizinhas. A estrutura do dicionário é a seguinte:
+        move = {
+            regiao_destino1: {
+                label_populacao1: {
+                    'S': quantidade,
+                    'I': quantidade,
+                    'R': quantidade
+                },
+                label_populacao2: {
+                    'S': quantidade,
+                    'I': quantidade,
+                    'R': quantidade
+                },
+                ...
+            },
+            regiao_destino2: {
+                ...
+            },
+            ...
+        }
+
+        Retorna:
+        move (dict): Dicionário que representa os movimentos dos indivíduos entre
+            as regiões vizinhas.
+        """
+        move = {}
+        for pop in self.populacoes:
+            p = [pop.params.tx_mobilidade / len(self.vizinhos)] * len(self.vizinhos) + \
+                [1 - pop.params.tx_mobilidade]
+            
+            for status, count in [('S', int(pop.S)), ('I', int(pop.I)), ('R', int(pop.R))]:
+                for _ in range(count):
+                    n = np.random.choice(self.vizinhos + [self.id], p=p)
+                    if n != self.id:
+                        move.setdefault(n, {}).setdefault(pop.label, {}).setdefault(status, 0)
+                        move[n][pop.label][status] += 1
+
+        return move
+
+
+
+
 
     def plot(self):
         """
@@ -99,7 +146,7 @@ class Regiao:
         plt.show()
     
     def __str__(self):
-                """
+        """
         Retorna uma representação em string da região.
 
         Returns:
