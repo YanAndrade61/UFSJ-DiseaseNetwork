@@ -20,19 +20,21 @@ class Rede:
         """
         self.nodes = {node: Regiao(node, deepcopy(populacoes), list(G.neighbors(node))) for node in G.nodes}
         self.G = G
-
-    def plot(self):
+        self.steps = 0
+        self.hist = {pop: [] for pop in populacoes}
+        
+    def plot(self, file: str):
         
         color = {'S':'green', 'I':'red', 'R':'yellow'}
         nc = []
         ns = []
         for n in self.G.nodes:
             c,s = self.nodes[n].get_SIR()
+            print(n,self.nodes[n].get_S(),self.nodes[n].get_I(),self.nodes[n].get_R())
             nc.append(color[c])
             ns.append(s/10)
-        fig, ax = ox.plot_graph(self.G, node_size=ns, node_color=nc, node_zorder=2)
-        fig.show()
-        fig.savefig('mapa')
+        fig, ax = ox.plot_graph(self.G, node_size=ns, node_color=nc, node_zorder=2, show=False)
+        fig.savefig(file)
 
     def move(self):
 
@@ -44,7 +46,13 @@ class Rede:
                     self.nodes[n].populacoes[p].S += sir['S']
                     self.nodes[n].populacoes[p].I += sir['I']
                     self.nodes[n].populacoes[p].R += sir['R']
-                    print(n,self.nodes[n].populacoes[p].S)
+
+    def simulate(self):
+
+        for reg in self.nodes.values():
+            reg.simulate_edo()
+        self.steps += 1
+        self.plot(f'img/result{self.steps}')
 
     def __str__(self):
         """

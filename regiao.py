@@ -104,18 +104,15 @@ class Regiao:
         """
         move = {}
         for pop in self.populacoes.values():
-            p = [pop.params.tx_mobilidade / len(self.vizinhos)] * len(self.vizinhos) + \
-                [1 - pop.params.tx_mobilidade]
             
-            for status, count in [('S', int(pop.S)), ('I', int(pop.I)), ('R', int(pop.R))]:
-                for _ in range(count):
-                    n = np.random.choice(self.vizinhos + [self.id], p=p)
-                    if n != self.id:
-                        move.setdefault(n, {}).setdefault(pop.label, {}).setdefault('S', 0)
-                        move[n][pop.label].setdefault('I',0)
-                        move[n][pop.label].setdefault('R',0)
-                        move[n][pop.label][status] += 1
-                        setattr(pop, status, getattr(pop, status) - 1)
+            dest = np.random.choice(self.vizinhos)
+            prop = round(pop.params.tx_mobilidade/3,2)
+            move.setdefault(dest, {}).setdefault(pop.label, {})
+            move[dest][pop.label] = {'S':int(pop.S*prop), 'I': int(pop.I*prop), 'R':int(pop.R*prop)}
+            pop.S -= int(pop.S*prop)
+            pop.I -= int(pop.I*prop)
+            pop.R -= int(pop.R*prop)
+
         return move
 
     def plot(self):
