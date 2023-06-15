@@ -1,5 +1,6 @@
 from regiao import Regiao
-
+from copy import deepcopy
+import osmnx as ox
 
 class Rede:
     """
@@ -17,8 +18,21 @@ class Rede:
         - G: O grafo que representa a rede de regiões.
         - populacoes: A lista de populações a serem atribuídas às regiões.
         """
-        self.nodes = {node: Regiao(node, populacoes, list(G.neighbors(node))) for node in G.nodes}
+        self.nodes = {node: Regiao(node, deepcopy(populacoes), list(G.neighbors(node))) for node in G.nodes}
+        self.G = G
 
+    def plot(self):
+        
+        color = {'S':'green', 'I':'red', 'R':'yellow'}
+        nc = []
+        ns = []
+        for n in self.G.nodes:
+            c,s = self.nodes[n].get_SIR()
+            nc.append(color[c])
+            ns.append(s/10)
+        fig, ax = ox.plot_graph(self.G, node_size=ns, node_color=nc, node_zorder=2)
+        fig.show()
+        fig.savefig('mapa')
 
     def move(self):
 

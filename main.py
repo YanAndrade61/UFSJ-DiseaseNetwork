@@ -53,4 +53,5 @@ G = ox.graph_from_place("São João del Rei, Minas Gerais, Brazil", network_type
 
 x = Rede(G,d)
 x.move()
+x.plot()
 print(x)

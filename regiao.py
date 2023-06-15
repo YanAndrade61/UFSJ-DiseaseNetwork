@@ -56,12 +56,23 @@ class Regiao:
     
     def get_SIR(self):
         """
-        Retorna a soma dos valores S + I + R de todas as populações na região.
+        Retorna a soma dos valores S + I + R de todas as populações na região
+        e qual porção representa a maior parte da população.
 
         Returns:
-        A soma dos valores S + I + R de todas as populações.
+        tuple: Uma tupla contendo a categoria ('S', 'I' ou 'R') que representa a
+        maior parte da população e a soma dos valores S + I + R de todas as populações.
         """
-        return sum(pop.S + pop.I + pop.R for pop in self.populacoes.values())
+        S = self.get_S()
+        I = self.get_I()
+        R = self.get_R()
+
+        max_category = max(('S', S), ('I', I), ('R', R), key=lambda x: x[1])
+        total = S + I + R
+
+        return max_category[0], total
+
+        
 
     def simulate_edo(self):
         """
@@ -72,7 +83,7 @@ class Regiao:
 
         O resultado da simulação é armazenado no atributo 'hist' da região.
         """
-        I_norm = self.get_I() / self.get_SIR()
+        I_norm = self.get_I() / self.get_SIR()[1]
         for pop in self.populacoes.values():
             _yk = [pop.S, pop.I, pop.R, I_norm]
             pop.S, pop.I, pop.R, _ = rk4(ode_system, _yk, pop.params)
@@ -96,7 +107,6 @@ class Regiao:
             p = [pop.params.tx_mobilidade / len(self.vizinhos)] * len(self.vizinhos) + \
                 [1 - pop.params.tx_mobilidade]
             
-            S_temp, I_temp, R_temp = pop.S, pop.I, pop.R
             for status, count in [('S', int(pop.S)), ('I', int(pop.I)), ('R', int(pop.R))]:
                 for _ in range(count):
                     n = np.random.choice(self.vizinhos + [self.id], p=p)
@@ -105,12 +115,7 @@ class Regiao:
                         move[n][pop.label].setdefault('I',0)
                         move[n][pop.label].setdefault('R',0)
                         move[n][pop.label][status] += 1
-                        if status == 'S': S_temp -= 1
-                        if status == 'I': I_temp -= 1
-                        if status == 'R': R_temp -= 1
-
-            pop.S, pop.I, pop.R = S_temp, I_temp, R_temp
-
+                        setattr(pop, status, getattr(pop, status) - 1)
         return move
 
     def plot(self):
