@@ -19,6 +19,19 @@ class Rede:
         """
         self.nodes = {node: Regiao(node, populacoes, list(G.neighbors(node))) for node in G.nodes}
 
+
+    def move(self):
+
+        movement = [reg.simulate_move() for reg in self.nodes.values()]
+        for m in movement:
+            for n, pop in list(m.items()):
+                for p,sir in list(pop.items()):
+                    
+                    self.nodes[n].populacoes[p].S += sir['S']
+                    self.nodes[n].populacoes[p].I += sir['I']
+                    self.nodes[n].populacoes[p].R += sir['R']
+                    print(n,self.nodes[n].populacoes[p].S)
+
     def __str__(self):
         """
         Retorna uma representação em string da rede.

@@ -1,4 +1,4 @@
-from ode import rk4
+from ode import *
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -12,7 +12,7 @@ class Regiao:
     - vizinhos (list): Lista de regiões vizinhas.
     """
 
-    def __init__(self, id: int, populacoes: list, vizinhos: list):
+    def __init__(self, id: int, populacoes: dict, vizinhos: list):
         """
         Inicializa uma região com um identificador, uma lista de populações e uma lista de regiões vizinhas.
 
@@ -24,7 +24,7 @@ class Regiao:
         self.id = id
         self.populacoes = populacoes
         self.vizinhos = vizinhos
-        self.hist = {pop.label: [] for pop in populacoes}
+        self.hist = {pop: [] for pop in populacoes}
         self.steps = 0
 
     def get_S(self):
@@ -34,7 +34,7 @@ class Regiao:
         Returns:
         A soma dos valores S de todas as populações.
         """
-        return sum(pop.S for pop in self.populacoes)
+        return sum(pop.S for pop in self.populacoes.values())
 
     def get_I(self):
         """
@@ -43,7 +43,7 @@ class Regiao:
         Returns:
         A soma dos valores I de todas as populações.
         """
-        return sum(pop.I for pop in self.populacoes)
+        return sum(pop.I for pop in self.populacoes.values())
 
     def get_R(self):
         """
@@ -52,7 +52,7 @@ class Regiao:
         Returns:
         A soma dos valores R de todas as populações.
         """
-        return sum(pop.R for pop in self.populacoes)
+        return sum(pop.R for pop in self.populacoes.values())
     
     def get_SIR(self):
         """
@@ -61,7 +61,7 @@ class Regiao:
         Returns:
         A soma dos valores S + I + R de todas as populações.
         """
-        return sum(pop.S + pop.I + pop.R for pop in self.populacoes)
+        return sum(pop.S + pop.I + pop.R for pop in self.populacoes.values())
 
     def simulate_edo(self):
         """
@@ -73,59 +73,45 @@ class Regiao:
         O resultado da simulação é armazenado no atributo 'hist' da região.
         """
         I_norm = self.get_I() / self.get_SIR()
-        for pop in self.populacoes:
+        for pop in self.populacoes.values():
             _yk = [pop.S, pop.I, pop.R, I_norm]
             pop.S, pop.I, pop.R, _ = rk4(ode_system, _yk, pop.params)
             self.hist[pop.label].append([pop.S, pop.I, pop.R])
 
         self.steps += 1
+    
     def simulate_move(self):
         """
         Simula os movimentos dos indivíduos entre as regiões vizinhas.
 
         Retorna um dicionário que representa os movimentos dos indivíduos entre
         as regiões vizinhas. A estrutura do dicionário é a seguinte:
-        move = {
-            regiao_destino1: {
-                label_populacao1: {
-                    'S': quantidade,
-                    'I': quantidade,
-                    'R': quantidade
-                },
-                label_populacao2: {
-                    'S': quantidade,
-                    'I': quantidade,
-                    'R': quantidade
-                },
-                ...
-            },
-            regiao_destino2: {
-                ...
-            },
-            ...
-        }
 
-        Retorna:
+        Retorns:
         move (dict): Dicionário que representa os movimentos dos indivíduos entre
             as regiões vizinhas.
         """
         move = {}
-        for pop in self.populacoes:
+        for pop in self.populacoes.values():
             p = [pop.params.tx_mobilidade / len(self.vizinhos)] * len(self.vizinhos) + \
                 [1 - pop.params.tx_mobilidade]
             
+            S_temp, I_temp, R_temp = pop.S, pop.I, pop.R
             for status, count in [('S', int(pop.S)), ('I', int(pop.I)), ('R', int(pop.R))]:
                 for _ in range(count):
                     n = np.random.choice(self.vizinhos + [self.id], p=p)
                     if n != self.id:
-                        move.setdefault(n, {}).setdefault(pop.label, {}).setdefault(status, 0)
+                        move.setdefault(n, {}).setdefault(pop.label, {}).setdefault('S', 0)
+                        move[n][pop.label].setdefault('I',0)
+                        move[n][pop.label].setdefault('R',0)
                         move[n][pop.label][status] += 1
+                        if status == 'S': S_temp -= 1
+                        if status == 'I': I_temp -= 1
+                        if status == 'R': R_temp -= 1
+
+            pop.S, pop.I, pop.R = S_temp, I_temp, R_temp
 
         return move
-
-
-
-
 
     def plot(self):
         """
@@ -136,7 +122,7 @@ class Regiao:
         fig, ax = plt.subplots(1, len(self.populacoes), squeeze=False)
         time = np.arange(0, self.steps * 0.01, 0.01)
 
-        for i, pop in enumerate(self.populacoes):
+        for i, pop in enumerate(self.populacoes.values()):
             ax[0][i].set(xlabel='time (days)', ylabel='[Y]', title=pop.label)
             ax[0][i].plot(time, np.array(self.hist[pop.label]))
             ax[0][i].legend(['S', 'I', 'R'], loc='best')
@@ -153,5 +139,5 @@ class Regiao:
         Uma string representando a região.
         """
         string = f'\nid: {self.id}\nvizinhos: {self.vizinhos}'
-        string += ''.join(str(pop) for pop in self.populacoes)
+        string += ''.join(str(pop) for pop in self.populacoes.values())
         return string

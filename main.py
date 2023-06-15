@@ -32,20 +32,25 @@ idoso_config = {
     "R": 100,
 }
 
+
 adulto = Populacao(**adulto_config)
 idoso = Populacao(**idoso_config)
-regiao = Regiao(1,[adulto,idoso],[3,2])
+
+
+d = {adulto.label: adulto, idoso.label:idoso}
+regiao = Regiao(1,d,[3,2])
 
 time = 100
 
 # for i in range(time):
 #     regiao.simulate_edo()
 
-print(regiao.simulate_move())
+# print(regiao.simulate_move())
 
 # regiao.plot()
 
-# G = ox.graph_from_place("São João del Rei, Minas Gerais, Brazil", network_type="drive")
+G = ox.graph_from_place("São João del Rei, Minas Gerais, Brazil", network_type="drive")
 
-
-# print(Rede(G,[adulto,idoso]))
+x = Rede(G,d)
+x.move()
+print(x)
