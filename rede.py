@@ -1,6 +1,9 @@
-from regiao import Regiao
+from matplotlib.backends.backend_pdf import PdfPages
+import matplotlib.pyplot as plt
 from copy import deepcopy
+from regiao import Regiao
 import osmnx as ox
+import numpy as np
 
 class Rede:
     """
@@ -22,19 +25,38 @@ class Rede:
         self.G = G
         self.steps = 0
         self.hist = {pop: [] for pop in populacoes}
-        
-    def plot(self, file: str):
+        self.pdf = PdfPages('disease-network.pdf')
+
+    def plot_graph(self, file: str):
         
         color = {'S':'green', 'I':'red', 'R':'yellow'}
         nc = []
         ns = []
         for n in self.G.nodes:
             c,s = self.nodes[n].get_SIR()
-            print(n,self.nodes[n].get_S(),self.nodes[n].get_I(),self.nodes[n].get_R())
             nc.append(color[c])
             ns.append(s/10)
         fig, ax = ox.plot_graph(self.G, node_size=ns, node_color=nc, node_zorder=2, show=False)
-        fig.savefig(file)
+        self.pdf.savefig(fig)
+        plt.close()
+
+    def plot_edo(self):
+        """
+        Gera um gráfico da simulação das populações na rede.
+
+        O gráfico mostra a variação dos valores S, I e R ao longo do tempo para cada população.
+        """
+        fig, ax = plt.subplots(len(self.hist),1, squeeze=False,figsize=(10,7))
+        time = np.arange(0, self.steps * 0.01, 0.01)
+
+        for i,label in enumerate(self.hist):
+            ax[i][0].set(xlabel='time (days)', ylabel='[Y]', title=label)
+            ax[i][0].plot(range(self.steps), np.array(self.hist[label]))
+            ax[i][0].legend(['S', 'I', 'R'], loc='best')
+            ax[i][0].grid()
+        fig.tight_layout(pad=2.0)
+        self.pdf.savefig(fig)
+        self.pdf.close()
 
     def move(self):
 
@@ -47,12 +69,25 @@ class Rede:
                     self.nodes[n].populacoes[p].I += sir['I']
                     self.nodes[n].populacoes[p].R += sir['R']
 
-    def simulate(self):
+    def run_edo(self):
 
         for reg in self.nodes.values():
             reg.simulate_edo()
         self.steps += 1
-        self.plot(f'img/result{self.steps}')
+        self.plot_graph(f'img/result{self.steps}')
+        self.update_hist()
+
+    def update_hist(self):
+
+        vec = {label: np.zeros(3) for label in self.hist}
+        for reg in self.nodes.values():
+            for label,pop in reg.populacoes.items():
+                vec[label][0] += pop.S
+                vec[label][1] += pop.I
+                vec[label][2] += pop.R
+
+        for label in self.hist:
+            self.hist[label].append(vec[label])
 
     def __str__(self):
         """
