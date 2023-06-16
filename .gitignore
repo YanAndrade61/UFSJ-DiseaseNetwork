@@ -1,0 +1,47 @@
+# Arquivos de configuração
+*.ini
+*.conf
+*.env
+
+# Arquivos de log
+*.log
+*.log.*
+log/
+
+# Arquivos de cache
+*.cache
+.cache/
+
+# Arquivos de dados
+*.db
+*.sqlite
+*.sqlite3
+
+# Arquivos de backup
+*.bak
+*.swp
+*.swo
+
+
+# Arquivos compilados
+*.pyc
+*.pyo
+__pycache__/
+
+# Diretórios de ambiente virtual
+venv/
+env/
+ENV/
+
+# Diretórios gerados automaticamente
+node_modules/
+dist/
+build/
+
+# Arquivos de senhas e chaves
+*.secret
+*.key
+
+# Outros
+.DS_Store
+Thumbs.db
