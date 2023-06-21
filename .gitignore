@@ -12,6 +12,7 @@ log/
 # Arquivos de cache
 *.cache
 .cache/
+gif/
 
 # Arquivos de dados
 *.db

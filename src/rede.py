@@ -36,8 +36,11 @@ class Rede:
             c,s = self.nodes[n].get_SIR()
             nc.append(color[c])
             ns.append(s/10)
+        
         fig, ax = ox.plot_graph(self.G, node_size=ns, node_color=nc, node_zorder=2, show=False)
+        fig.savefig(f'gif/img{self.steps}')
         self.pdf.savefig(fig)
+        
         plt.close()
 
     def plot_edo(self):
