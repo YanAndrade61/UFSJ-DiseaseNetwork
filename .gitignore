@@ -2,6 +2,7 @@
 *.ini
 *.conf
 *.env
+*.pdf
 
 # Arquivos de log
 *.log

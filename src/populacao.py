@@ -1,4 +1,5 @@
 from src.params import Params
+import numpy as np
 
 class Populacao:
     """
@@ -12,12 +13,12 @@ class Populacao:
     - R (int): O número de indivíduos recuperados na população.
     """
 
-    def __init__(self, label: str, params: dict, S: int, I: int, R: int):
+    def __init__(self, label: str, params: dict, S: list, I: list, R: list):
         self.label = label
         self.params = Params(**params)
-        self.S = S
-        self.I = I
-        self.R = R
+        self.S = np.random.randint(S[0],S[1])
+        self.I = np.random.randint(I[0],I[1])
+        self.R = np.random.randint(R[0],R[1])
 
     def __str__(self) -> str:
         string = f'''\nPopulacao:
