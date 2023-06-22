@@ -30,7 +30,8 @@ Ao final da simulação, os resultados serão apresentados, incluindo gráficos 
 
 Será gerado um mapa da rede, onde cada vértice representa uma região e suas respectivas populações. O tamanho do vértice é proporcional à quantidade de indivíduos na região, e a cor do vértice representa o estado da maioria dos indivíduos daquela região (Suscetível, Infectado ou Recuperado).
 
-![Mapa da Rede](img/mapa.png)
+![img/gif](https://github.com/YanAndrade61/UFSJ-DiseaseNetwork/blob/main/params4.gif)
+
 
 ### Evolução das Populações por Estados SIR
 
