@@ -1,0 +1,39 @@
+populacao:
+  adulto:  
+    label: "adulto"
+    params: 
+        tx_mortalidade: 0.02
+        tx_mobilidade: 0.8
+        tx_infeccao: 0.4
+        tx_nascimento: 0.1
+        tx_recuperacao: 0.1
+    S: [40,120]
+    I: [20,80]
+    R: [0,1]
+
+  idoso:  
+      label: "idoso"
+      params:
+          tx_mortalidade: 0.2
+          tx_mobilidade: 0.2
+          tx_infeccao: 0.6
+          tx_nascimento: 0
+          tx_recuperacao: 0.01
+      S: [40,120]
+      I: [20,80]
+      R: [0,1]
+
+  crianca:  
+      label: "crianca"
+      params:
+          tx_mortalidade: 0.02
+          tx_mobilidade: 0.6
+          tx_infeccao: 0.4
+          tx_nascimento: 0
+          tx_recuperacao: 0.2
+      S: [40,120]
+      I: [20,80]
+      R: [0,1]
+config:
+  place: "São João del Rei, Minas Gerais, Brazil"
+  steps: 365

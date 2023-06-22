@@ -21,10 +21,10 @@ class Rede:
         - G: O grafo que representa a rede de regiões.
         - populacoes: A lista de populações a serem atribuídas às regiões.
         """
-        self.nodes = {node: Regiao(node, deepcopy(populacoes), list(G.neighbors(node))) for node in G.nodes}
+        self.nodes = {node: Regiao(node, populacoes[i], list(G.neighbors(node))) for i,node in enumerate(G.nodes)}
         self.G = G
         self.steps = 0
-        self.hist = {pop: [] for pop in populacoes}
+        self.hist = {pop: [] for pop in populacoes[0]}
         self.pdf = PdfPages('disease-network.pdf')
 
     def plot_graph(self, file: str):
