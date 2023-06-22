@@ -3,7 +3,7 @@ populacao:
     label: "adulto"
     params: 
         tx_mortalidade: 0.01
-        tx_mobilidade: 0.1
+        tx_mobilidade: 0.
         tx_infeccao: 0.4
         tx_nascimento: 0.1
         tx_recuperacao: 0.1
@@ -15,7 +15,7 @@ populacao:
       label: "idoso"
       params:
           tx_mortalidade: 0.1
-          tx_mobilidade: 0.1
+          tx_mobilidade: 0.
           tx_infeccao: 0.6
           tx_nascimento: 0
           tx_recuperacao: 0.01
@@ -27,7 +27,7 @@ populacao:
       label: "crianca"
       params:
           tx_mortalidade: 0.01
-          tx_mobilidade: 0.3
+          tx_mobilidade: 0.
           tx_infeccao: 0.4
           tx_nascimento: 0
           tx_recuperacao: 0.2

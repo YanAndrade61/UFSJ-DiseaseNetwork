@@ -1,0 +1,38 @@
+adulto_config = {  
+    "label": "adulto",
+    "params": {  
+        "tx_mortalidade": 0.01,
+        "tx_mobilidade": 0.5,
+        "tx_infeccao": 0.5,
+        "tx_nascimento": 0.01,
+        "tx_recuperacao": 0.2},
+    "S": 100,
+    "I": 80,
+    "R": 0,
+}
+
+idoso_config = {  
+    "label": "idoso",
+    "params": {  
+        "tx_mortalidade": 0.1,
+        "tx_mobilidade": 0.1,
+        "tx_infeccao": 0.8,
+        "tx_nascimento": 0,
+        "tx_recuperacao": 0.01},
+    "S": 100,
+    "I": 80,
+    "R": 0,
+}
+
+crianca_config = {  
+    "label": "crianca",
+    "params": {  
+        "tx_mortalidade": 0.01,
+        "tx_mobilidade": 0.3,
+        "tx_infeccao": 0.8,
+        "tx_nascimento": 0,
+        "tx_recuperacao": 0.5},
+    "S": 100,
+    "I": 80,
+    "R": 0,
+}

@@ -32,6 +32,6 @@ if __name__ == '__main__':
     for i in nome_arquivos:
         imagens.append(imageio.imread(os.path.join(path, i)))
         
-    imageio.mimsave('params1.gif', imagens, duration=0.1)
+    imageio.mimsave('params.gif', imagens, duration=0.1)
     
 

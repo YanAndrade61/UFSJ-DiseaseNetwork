@@ -58,6 +58,7 @@ class Rede:
             ax[i][0].legend(['S', 'I', 'R'], loc='best')
             ax[i][0].grid()
         fig.tight_layout(pad=2.0)
+        fig.savefig('edo')
         self.pdf.savefig(fig)
         self.pdf.close()
 
